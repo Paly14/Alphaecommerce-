@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Calculadora de Importación</title>
+<style>
+  :root {
+    --bg: #0f172a;
+    --panel: #1e293b;
+    --panel-2: #273449;
+    --border: #334155;
+    --text: #e2e8f0;
+    --muted: #94a3b8;
+    --accent: #38bdf8;
+    --accent-2: #22c55e;
+    --danger: #ef4444;
+    --calc-bg: #14283a;
+    --warn: #f59e0b;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    padding: 24px;
+  }
+  header {
+    max-width: 1400px;
+    margin: 0 auto 20px;
+  }
+  h1 {
+    margin: 0 0 4px;
+    font-size: 1.6rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  h1 .emoji { font-size: 1.8rem; }
+  .subtitle { color: var(--muted); margin: 0 0 16px; font-size: .95rem; }
+
+  .controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    align-items: flex-end;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px;
+  }
+  .field { display: flex; flex-direction: column; gap: 4px; }
+  .field label { font-size: .78rem; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
+  .field input[type="number"] {
+    width: 110px;
+    background: var(--panel-2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-size: .95rem;
+  }
+  .field small { color: var(--muted); font-size: .72rem; }
+  .spacer { flex: 1; }
+
+  button {
+    cursor: pointer;
+    border: none;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: .9rem;
+    font-weight: 600;
+    color: #0b1220;
+  }
+  button.primary { background: var(--accent); }
+  button.success { background: var(--accent-2); }
+  button.ghost {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+  }
+  button.primary:hover { filter: brightness(1.08); }
+  button.success:hover { filter: brightness(1.08); }
+  button.ghost:hover { color: var(--text); border-color: var(--muted); }
+
+  .table-wrap {
+    max-width: 1400px;
+    margin: 20px auto 0;
+    overflow-x: auto;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--panel);
+  }
+  table { border-collapse: collapse; width: 100%; min-width: 1200px; }
+  thead th {
+    background: var(--panel-2);
+    color: var(--muted);
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 2px solid var(--border);
+    white-space: nowrap;
+    position: sticky;
+    top: 0;
+  }
+  thead th.calc { color: var(--accent); background: var(--calc-bg); }
+  tbody td {
+    padding: 6px 8px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: middle;
+  }
+  tbody tr:hover { background: rgba(56,189,248,.04); }
+  tbody td.calc { background: var(--calc-bg); font-variant-numeric: tabular-nums; text-align: right; white-space: nowrap; }
+  tbody input {
+    width: 100%;
+    min-width: 70px;
+    background: transparent;
+    border: 1px solid transparent;
+    color: var(--text);
+    border-radius: 6px;
+    padding: 6px 8px;
+    font-size: .9rem;
+  }
+  tbody input:hover { border-color: var(--border); }
+  tbody input:focus { outline: none; border-color: var(--accent); background: var(--panel-2); }
+  tbody input.num { text-align: right; font-variant-numeric: tabular-nums; }
+  td.name-col input { min-width: 130px; }
+  td.link-col input { min-width: 90px; }
+
+  .val { font-weight: 600; }
+  .val.good { color: var(--accent-2); }
+  .val.bad { color: var(--danger); }
+  .val.warn { color: var(--warn); }
+  .muted-val { color: var(--muted); }
+
+  td.actions { text-align: center; }
+  .del-btn {
+    background: transparent;
+    color: var(--muted);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: .85rem;
+  }
+  .del-btn:hover { color: #fff; background: var(--danger); border-color: var(--danger); }
+
+  .footer-actions {
+    max-width: 1400px;
+    margin: 16px auto 0;
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+  }
+  .legend {
+    max-width: 1400px;
+    margin: 24px auto 0;
+    color: var(--muted);
+    font-size: .82rem;
+    line-height: 1.6;
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 16px 20px;
+  }
+  .legend code { background: var(--panel-2); padding: 1px 6px; border-radius: 4px; color: var(--accent); }
+  a.link { color: var(--accent); text-decoration: none; }
+  a.link:hover { text-decoration: underline; }
+  .empty-hint { text-align: center; color: var(--muted); padding: 30px; }
+</style>
+</head>
+<body>
+<header>
+  <h1><span class="emoji">📦</span> Calculadora de Importación</h1>
+  <p class="subtitle">Cargá tus productos y calculá inversión, break-even y precio de venta automáticamente.</p>
+
+  <div class="controls">
+    <div class="field">
+      <label for="taxRate">Impuestos Argie (% del FOB)</label>
+      <input type="number" id="taxRate" value="80" min="0" step="1" />
+      <small>Se aplica sobre el Valor FOB</small>
+    </div>
+    <div class="field">
+      <label for="marginRate">Margen mín. venta (%)</label>
+      <input type="number" id="marginRate" value="50" min="0" step="1" />
+      <small>Sobre el Break-Even</small>
+    </div>
+    <div class="field">
+      <label for="currency">Símbolo</label>
+      <input type="text" id="currency" value="$" style="width:60px;background:var(--panel-2);border:1px solid var(--border);color:var(--text);border-radius:8px;padding:8px 10px;" />
+      <small>Moneda a mostrar</small>
+    </div>
+    <div class="spacer"></div>
+    <button class="success" id="addRow">+ Agregar producto</button>
+  </div>
+</header>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>Nombre</th>
+        <th>Link Amazon</th>
+        <th>Link Alibaba</th>
+        <th>Precio Venta AMZ</th>
+        <th>Precio Fabricante</th>
+        <th>Unidades</th>
+        <th>Freight</th>
+        <th>Valor FOB</th>
+        <th class="calc">Impuestos Argie</th>
+        <th class="calc">Inversión Total</th>
+        <th class="calc">Break-Even ARG</th>
+        <th class="calc">Mín. de Venta</th>
+        <th class="calc">% Ganancia Sug.</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody id="tbody"></tbody>
+  </table>
+</div>
+
+<div class="footer-actions">
+  <button class="ghost" id="exportCsv">⬇ Exportar CSV</button>
+  <button class="ghost" id="clearAll">🗑 Vaciar todo</button>
+</div>
+
+<div class="legend">
+  <strong>Cómo se calcula cada columna:</strong><br />
+  • <code>Impuestos Argie = Valor FOB × tasa de impuestos</code> (por defecto 80%)<br />
+  • <code>Inversión Total = Freight + Valor FOB + Impuestos Argie</code><br />
+  • <code>Break-Even ARG = Inversión Total ÷ Unidades</code> (costo real por unidad)<br />
+  • <code>Mín. de Venta = Break-Even × (1 + margen)</code> (por defecto ×1.5)<br />
+  • <code>% Ganancia Sug. = Precio Venta AMZ ÷ Break-Even × 100</code><br />
+  <span style="color:var(--muted)">Los datos se guardan automáticamente en tu navegador. Basado en tu planilla «PLANILLA IMPORTACION».</span>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var STORAGE_KEY = "import_calc_v1";
+  var tbody = document.getElementById("tbody");
+  var taxInput = document.getElementById("taxRate");
+  var marginInput = document.getElementById("marginRate");
+  var currencyInput = document.getElementById("currency");
+
+  var state = load() || {
+    tax: 80,
+    margin: 50,
+    currency: "$",
+    rows: [
+      { nombre: "Ejemplo", amazon: "", alibaba: "", venta: 25, fabricante: 10, unidades: 10, freight: 100, fob: 20 }
+    ]
+  };
+
+  taxInput.value = state.tax;
+  marginInput.value = state.margin;
+  currencyInput.value = state.currency;
+
+  function load() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)); }
+    catch (e) { return null; }
+  }
+  function save() {
+    state.tax = num(taxInput.value);
+    state.margin = num(marginInput.value);
+    state.currency = currencyInput.value || "$";
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  }
+
+  function num(v) {
+    var n = parseFloat(String(v).replace(",", "."));
+    return isNaN(n) ? 0 : n;
+  }
+
+  function money(n) {
+    if (!isFinite(n)) return "—";
+    return state.currency + n.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+  }
+
+  function calc(row) {
+    var taxRate = num(taxInput.value) / 100;
+    var marginRate = num(marginInput.value) / 100;
+    var fob = num(row.fob);
+    var freight = num(row.freight);
+    var unidades = num(row.unidades);
+    var venta = num(row.venta);
+
+    var impuestos = fob * taxRate;
+    var inversion = freight + fob + impuestos;
+    var breakEven = unidades > 0 ? inversion / unidades : Infinity;
+    var minVenta = isFinite(breakEven) ? breakEven * (1 + marginRate) : Infinity;
+    var pctGanancia = (isFinite(breakEven) && breakEven > 0) ? (venta / breakEven) * 100 : Infinity;
+
+    return { impuestos: impuestos, inversion: inversion, breakEven: breakEven, minVenta: minVenta, pctGanancia: pctGanancia };
+  }
+
+  function inputCell(row, key, opts) {
+    opts = opts || {};
+    var td = document.createElement("td");
+    if (opts.cls) td.className = opts.cls;
+    var inp = document.createElement("input");
+    inp.type = "text";
+    if (opts.number) inp.className = "num";
+    inp.value = row[key] != null ? row[key] : "";
+    if (opts.placeholder) inp.placeholder = opts.placeholder;
+    inp.addEventListener("input", function () {
+      row[key] = opts.number ? num(inp.value) : inp.value;
+      if (opts.number) render(); else save();
+    });
+    td.appendChild(inp);
+    return td;
+  }
+
+  function calcCell(text, cls) {
+    var td = document.createElement("td");
+    td.className = "calc";
+    var span = document.createElement("span");
+    span.className = "val" + (cls ? " " + cls : "");
+    span.textContent = text;
+    td.appendChild(span);
+    return td;
+  }
+
+  function render() {
+    tbody.innerHTML = "";
+    if (!state.rows.length) {
+      var tr = document.createElement("tr");
+      var td = document.createElement("td");
+      td.colSpan = 14;
+      td.className = "empty-hint";
+      td.textContent = "No hay productos. Hacé clic en «+ Agregar producto» para empezar.";
+      tr.appendChild(td);
+      tbody.appendChild(tr);
+      save();
+      return;
+    }
+
+    state.rows.forEach(function (row, i) {
+      var tr = document.createElement("tr");
+      tr.appendChild(inputCell(row, "nombre", { cls: "name-col", placeholder: "Nombre" }));
+      tr.appendChild(inputCell(row, "amazon", { cls: "link-col", placeholder: "https://" }));
+      tr.appendChild(inputCell(row, "alibaba", { cls: "link-col", placeholder: "https://" }));
+      tr.appendChild(inputCell(row, "venta", { number: true }));
+      tr.appendChild(inputCell(row, "fabricante", { number: true }));
+      tr.appendChild(inputCell(row, "unidades", { number: true }));
+      tr.appendChild(inputCell(row, "freight", { number: true }));
+      tr.appendChild(inputCell(row, "fob", { number: true }));
+
+      var c = calc(row);
+      tr.appendChild(calcCell(money(c.impuestos)));
+      tr.appendChild(calcCell(money(c.inversion)));
+      tr.appendChild(calcCell(money(c.breakEven)));
+      tr.appendChild(calcCell(money(c.minVenta)));
+
+      var pctCls = "muted-val";
+      var pctText = "—";
+      if (isFinite(c.pctGanancia)) {
+        pctText = c.pctGanancia.toLocaleString("es-AR", { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + "%";
+        pctCls = c.pctGanancia >= 150 ? "good" : (c.pctGanancia >= 100 ? "warn" : "bad");
+      }
+      tr.appendChild(calcCell(pctText, pctCls));
+
+      var actionsTd = document.createElement("td");
+      actionsTd.className = "actions";
+      var del = document.createElement("button");
+      del.className = "del-btn";
+      del.textContent = "✕";
+      del.title = "Eliminar fila";
+      del.addEventListener("click", function () {
+        state.rows.splice(i, 1);
+        render();
+      });
+      actionsTd.appendChild(del);
+      tr.appendChild(actionsTd);
+
+      tbody.appendChild(tr);
+    });
+    save();
+  }
+
+  document.getElementById("addRow").addEventListener("click", function () {
+    state.rows.push({ nombre: "", amazon: "", alibaba: "", venta: 0, fabricante: 0, unidades: 0, freight: 0, fob: 0 });
+    render();
+  });
+
+  document.getElementById("clearAll").addEventListener("click", function () {
+    if (confirm("¿Vaciar todos los productos?")) {
+      state.rows = [];
+      render();
+    }
+  });
+
+  document.getElementById("exportCsv").addEventListener("click", function () {
+    var headers = ["Nombre","Link Amazon","Link Alibaba","Precio Venta AMZ","Precio Fabricante","Unidades","Freight","Valor FOB","Impuestos Argie","Inversion Total","Break-Even ARG","Min de Venta","% Ganancia Sug"];
+    var lines = [headers.join(",")];
+    state.rows.forEach(function (row) {
+      var c = calc(row);
+      var cells = [
+        row.nombre, row.amazon, row.alibaba, num(row.venta), num(row.fabricante),
+        num(row.unidades), num(row.freight), num(row.fob),
+        c.impuestos.toFixed(2), c.inversion.toFixed(2),
+        isFinite(c.breakEven) ? c.breakEven.toFixed(2) : "",
+        isFinite(c.minVenta) ? c.minVenta.toFixed(2) : "",
+        isFinite(c.pctGanancia) ? c.pctGanancia.toFixed(2) : ""
+      ];
+      lines.push(cells.map(function (v) {
+        var s = String(v == null ? "" : v);
+        return /[",\n]/.test(s) ? '"' + s.replace(/"/g, '""') + '"' : s;
+      }).join(","));
+    });
+    var blob = new Blob([lines.join("\n")], { type: "text/csv;charset=utf-8;" });
+    var url = URL.createObjectURL(blob);
+    var a = document.createElement("a");
+    a.href = url;
+    a.download = "importacion.csv";
+    a.click();
+    URL.revokeObjectURL(url);
+  });
+
+  taxInput.addEventListener("input", render);
+  marginInput.addEventListener("input", render);
+  currencyInput.addEventListener("input", render);
+
+  render();
+})();
+</script>
+</body>
+</html>
