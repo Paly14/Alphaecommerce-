@@ -20,7 +20,7 @@ const CONFIG = {
      - mensaje: texto que aparece ya escrito cuando abre el chat.
      --------------------------------------------------------------- */
   whatsapp: {
-    numero: '5491100000000',
+    numero: '5492944921937',
     mensaje: 'Hola! Vi la web de Alpha Ecommerce y quiero más información 🚀',
   },
 
