@@ -50,22 +50,22 @@ const CONFIG = {
      --------------------------------------------------------------- */
   casos: [
     {
-      video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ', // link de YouTube
-      nombre: 'Nombre del cliente',                          // quién habla
-      titulo: 'De 0 a $10.000 en ventas en 60 días',         // resultado
-      descripcion: 'Contá en una frase qué logró este cliente con Alpha Ecommerce.',
+      video: 'https://youtu.be/JHRBHT35et8',
+      nombre: 'Alumno de Alpha Ecommerce',
+      titulo: 'Boris',
+      descripcion: 'Escuchá en primera persona cómo le fue con Alpha Ecommerce.',
     },
     {
-      video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-      nombre: 'Nombre del cliente',
-      titulo: 'Duplicó sus ventas en 3 meses',
-      descripcion: 'Otro testimonio real de alguien que aplicó el sistema.',
+      video: 'https://youtu.be/Bvy1VXwr26g',
+      nombre: 'Alumno de Alpha Ecommerce',
+      titulo: 'Sara',
+      descripcion: 'Su experiencia aplicando el sistema, contada por ella misma.',
     },
     {
-      video: 'https://www.youtube.com/watch?v=dQw4w9WgXcQ',
-      nombre: 'Nombre del cliente',
-      titulo: 'Su primera venta a la semana',
-      descripcion: 'Un caso más para dar prueba social a los que dudan.',
+      video: 'https://youtu.be/K9x11x2u6oM',
+      nombre: 'Alumno de Alpha Ecommerce',
+      titulo: 'Jona Tedesco',
+      descripcion: 'Otro resultado real de alguien que confió en el proceso.',
     },
   ],
 
@@ -74,19 +74,19 @@ const CONFIG = {
      --------------------------------------------------------------- */
   beneficios: [
     {
-      icono: '🚀',
-      titulo: 'Lanzamiento rápido',
-      texto: 'Tu tienda lista y vendiendo en tiempo récord, con todo configurado.',
+      icono: '✅',
+      titulo: 'Productos testeados',
+      texto: 'No vas a depender de la suerte o testear a ver si algo vende o no.',
     },
     {
-      icono: '🎯',
-      titulo: 'Publicidad que convierte',
-      texto: 'Campañas pensadas para vender, no para gastar. Cada peso trabaja.',
+      icono: '💰',
+      titulo: '1000 USD en 45 días',
+      texto: '85% de nuestros alumnos alcanzaron sus primeros 1000 USD con sus primeros productos.',
     },
     {
-      icono: '📈',
-      titulo: 'Escala sostenible',
-      texto: 'Un sistema para crecer mes a mes sin depender de la suerte.',
+      icono: '📝',
+      titulo: 'Sistema ABC',
+      texto: 'Sistema diseñado y creado para que no te pierdas nunca con tu primer importación y venta.',
     },
   ],
 
