@@ -52,19 +52,19 @@ const CONFIG = {
     {
       video: 'https://youtu.be/JHRBHT35et8',
       nombre: 'Alumno de Alpha Ecommerce',
-      titulo: 'Boris',
+      titulo: 'Jona Tedesco',
       descripcion: 'Escuchá en primera persona cómo le fue con Alpha Ecommerce.',
     },
     {
       video: 'https://youtu.be/Bvy1VXwr26g',
       nombre: 'Alumno de Alpha Ecommerce',
-      titulo: 'Sara',
-      descripcion: 'Su experiencia aplicando el sistema, contada por ella misma.',
+      titulo: 'Boris',
+      descripcion: 'Su experiencia aplicando el sistema, en primera persona.',
     },
     {
       video: 'https://youtu.be/K9x11x2u6oM',
       nombre: 'Alumno de Alpha Ecommerce',
-      titulo: 'Jona Tedesco',
+      titulo: 'Sara',
       descripcion: 'Otro resultado real de alguien que confió en el proceso.',
     },
   ],
