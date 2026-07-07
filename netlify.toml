@@ -1,0 +1,5 @@
+# Configuración de Netlify para Alpha Ecommerce
+# Es una web estática (HTML/CSS/JS), no necesita compilarse.
+[build]
+  publish = "."
+  command = ""
