@@ -1,5 +1,0 @@
-# Para publicar el editor como sitio independiente en Netlify:
-# en "Base directory" poné `editor`. Es estático, no necesita compilarse.
-[build]
-  publish = "."
-  command = ""
