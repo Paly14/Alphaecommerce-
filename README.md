@@ -41,3 +41,8 @@ assets/css/styles.css → diseño
 assets/js/config.js   → 👈 EDITÁS ACÁ (textos, WhatsApp, videos)
 assets/js/app.js      → lógica (no hace falta tocar)
 ```
+
+## 🎬 Editor de video (Motion Studio)
+
+En [`editor/`](editor/) hay un editor de video con motion graphics, independiente de la landing.
+Instrucciones en [`editor/README.md`](editor/README.md).

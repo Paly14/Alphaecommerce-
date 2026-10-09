@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Motion Studio</title>
+  <meta name="description" content="Editor de video con motion graphics que funciona en el navegador." />
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect x='6' y='6' width='20' height='20' rx='3' transform='rotate(45 16 16)' fill='%237c5cff'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Anton&family=Bebas+Neue&family=Inter:wght@300..900&family=Lobster&family=Montserrat:ital,wght@0,300..900;1,300..900&family=Oswald:wght@300..700&family=Permanent+Marker&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,400;1,700;1,900&family=Roboto+Mono:wght@300..700&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="css/editor.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><span class="logo">◆</span> Motion Studio</div>
+    <input id="projectName" class="project-name" aria-label="Nombre del proyecto" />
+    <div class="top-actions">
+      <button id="btnUndo" class="icon" title="Deshacer (Ctrl+Z)">↶</button>
+      <button id="btnRedo" class="icon" title="Rehacer (Ctrl+Shift+Z)">↷</button>
+      <span class="sep"></span>
+      <button id="btnNew">Nuevo</button>
+      <button id="btnOpen" title="Abrir proyecto .json">Abrir</button>
+      <button id="btnSave" title="Descargar proyecto .json">Guardar</button>
+      <button id="btnExport" class="primary">Exportar video</button>
+    </div>
+    <input type="file" id="fileOpen" accept=".json,application/json" hidden />
+  </header>
+
+  <main class="workspace">
+    <aside class="panel left">
+      <nav class="tabs" role="tablist">
+        <button data-tab="media" class="active">Medios</button>
+        <button data-tab="motion">Motion</button>
+        <button data-tab="elements">Elementos</button>
+        <button data-tab="subs">Subtítulos</button>
+      </nav>
+
+      <section class="tab-body" data-body="media">
+        <label class="dropzone" id="dropzone">
+          <input type="file" id="fileImport" multiple accept="video/*,image/*,audio/*" hidden />
+          <b>Importar archivos</b>
+          <small>Hacé clic o arrastrá videos, imágenes o audio</small>
+        </label>
+        <div class="asset-grid" id="assetGrid"></div>
+        <p class="hint">Arrastrá un archivo a la línea de tiempo, o usá <b>+</b> para agregarlo en el playhead. Los archivos quedan guardados en este navegador.</p>
+      </section>
+
+      <section class="tab-body" data-body="motion" hidden>
+        <p class="hint">Se insertan en el playhead. Después podés cambiar textos, colores, tiempos y animaciones.</p>
+        <div class="tpl-grid" id="tplGrid"></div>
+      </section>
+
+      <section class="tab-body" data-body="elements" hidden>
+        <div class="el-grid">
+          <button data-el="text"><span class="el-ico">T</span>Texto</button>
+          <button data-el="heading"><span class="el-ico big">T</span>Título</button>
+          <button data-el="rect"><span class="el-ico">▬</span>Rectángulo</button>
+          <button data-el="circle"><span class="el-ico">●</span>Círculo</button>
+          <button data-el="line"><span class="el-ico">━</span>Línea</button>
+          <button data-el="frame"><span class="el-ico">▢</span>Marco</button>
+        </div>
+      </section>
+
+      <section class="tab-body" data-body="subs" hidden>
+        <p class="hint">Importá un archivo <b>.srt</b> o <b>.vtt</b> (por ejemplo, la transcripción exportada desde Descript) o pegalo abajo.</p>
+        <label class="field">Estilo
+          <select id="subStyle"></select>
+        </label>
+        <label class="field">Posición vertical
+          <input type="range" id="subPos" min="0.1" max="0.95" step="0.01" value="0.8" />
+        </label>
+        <label class="field">Tamaño
+          <input type="range" id="subSize" min="0.5" max="2" step="0.05" value="1" />
+        </label>
+        <textarea id="subText" rows="7" placeholder="1&#10;00:00:00,000 --> 00:00:02,000&#10;Hola, este es un subtítulo"></textarea>
+        <div class="row-buttons">
+          <label class="btn">
+            <input type="file" id="subFile" accept=".srt,.vtt,text/plain" hidden />Elegir archivo
+          </label>
+          <button id="subAdd" class="primary">Agregar subtítulos</button>
+        </div>
+      </section>
+    </aside>
+
+    <section class="stage">
+      <div class="viewer" id="viewer"><canvas id="preview"></canvas></div>
+      <div class="transport">
+        <button id="btnStart" class="icon" title="Ir al inicio (Inicio)">⏮</button>
+        <button id="btnPrevFrame" class="icon" title="Cuadro anterior (←)">◂</button>
+        <button id="btnPlay" class="play" title="Reproducir (Espacio)">▶</button>
+        <button id="btnNextFrame" class="icon" title="Cuadro siguiente (→)">▸</button>
+        <button id="btnEnd" class="icon" title="Ir al final (Fin)">⏭</button>
+        <span class="timecode"><b id="tcNow">00:00.00</b> / <span id="tcDur">00:00.00</span></span>
+        <span class="spacer"></span>
+        <select id="fmtQuick" title="Formato del video"></select>
+        <button id="btnSnapshot" class="icon" title="Guardar cuadro como PNG">⧉</button>
+      </div>
+    </section>
+
+    <aside class="panel right">
+      <div class="inspector" id="inspector"></div>
+    </aside>
+  </main>
+
+  <div class="splitter" id="splitter" title="Arrastrá para cambiar el alto"></div>
+
+  <section class="timeline" id="timeline">
+    <div class="tl-toolbar">
+      <button data-tl="split" title="Cortar el clip seleccionado en el playhead (S)">✂ Cortar</button>
+      <button data-tl="dup" title="Duplicar (Ctrl+D)">Duplicar</button>
+      <button data-tl="del" title="Borrar (Supr)">Borrar</button>
+      <span class="sep"></span>
+      <button data-tl="addV">+ Pista de video</button>
+      <button data-tl="addA">+ Pista de audio</button>
+      <span class="sep"></span>
+      <label class="toggle"><input type="checkbox" data-tl="snap" checked /> Imán</label>
+      <span class="spacer"></span>
+      <button data-tl="fit" title="Ver todo el proyecto">Ajustar</button>
+      <input type="range" data-tl="zoom" min="2" max="9.2" step="0.05" aria-label="Zoom" />
+    </div>
+    <div class="tl-scroll"></div>
+  </section>
+
+  <dialog id="exportDialog" class="dialog">
+    <form method="dialog">
+      <h2>Exportar video</h2>
+      <p class="muted" id="exportInfo"></p>
+      <label class="field">Calidad
+        <select id="exportQuality">
+          <option value="20000000">Máxima (20 Mbps)</option>
+          <option value="12000000" selected>Alta (12 Mbps)</option>
+          <option value="6000000">Media (6 Mbps)</option>
+          <option value="3000000">Liviana (3 Mbps)</option>
+        </select>
+      </label>
+      <p class="hint">El video se genera en tiempo real: tarda lo mismo que dura. No cambies de pestaña mientras exporta.</p>
+      <div class="progress" hidden><div class="progress-bar" id="exportBar"></div></div>
+      <p id="exportStatus" class="muted"></p>
+      <div class="row-buttons end">
+        <button value="cancel" id="exportCancel">Cerrar</button>
+        <a id="exportDownload" class="btn primary" hidden>Descargar</a>
+        <button id="exportStart" class="primary" value="default">Comenzar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <div id="toast" role="status" aria-live="polite"></div>
+
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
