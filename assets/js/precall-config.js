@@ -34,7 +34,7 @@ const PRECALL_CONFIG = {
   subtitulo:
     'Completá estas preguntas para que quien te atienda llegue a la llamada sabiendo tu situación. Son 2 minutos y hace que el tiempo rinda mucho más.',
   gracias:
-    'Mandanos el mensaje que ya te dejamos escrito: y te enviamos la Calculadora de Costos de Importación.',
+    'Mandanos el mensaje que ya te dejamos escrito y te enviamos la Calculadora de Costos de Importación.',
 
   /* ---------------------------------------------------------------
      4) WHATSAPP DEL PASO FINAL
