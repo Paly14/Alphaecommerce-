@@ -34,5 +34,17 @@ const PRECALL_CONFIG = {
   subtitulo:
     'Completá estas preguntas para que quien te atienda llegue a la llamada sabiendo tu situación. Son 2 minutos y hace que el tiempo rinda mucho más.',
   gracias:
-    'Ya podés cerrar esta página. Nos vemos en la llamada en el horario acordado.',
+    'Mandanos el mensaje que ya te dejamos escrito: te enviamos la Calculadora de Costos de Importación y armamos tu grupo con el closer que te va a atender en la llamada.',
+
+  /* ---------------------------------------------------------------
+     4) WHATSAPP DEL PASO FINAL
+     Al enviar el formulario aparece un botón que abre este chat
+     con el mensaje ya escrito. {nombre} se reemplaza por el nombre
+     que la persona completó en el formulario.
+     - numero: código de país + número, SIN espacios, SIN "+".
+     --------------------------------------------------------------- */
+  whatsapp: {
+    numero: '5492944921937',
+    mensaje: 'Hola! Soy {nombre}. Ya llené el formulario pre-call ✅ Quiero recibir la calculadora de costos.',
+  },
 };

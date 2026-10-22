@@ -181,6 +181,17 @@
     });
   }
 
+  /* ---------- Botón de WhatsApp de la pantalla final ---------- */
+  function linkWhatsApp(nombreCompleto) {
+    var wa = CFG.whatsapp || {};
+    var boton = document.getElementById('pcWhatsApp');
+    if (!boton || !wa.numero) return;
+    var nombre = (nombreCompleto || '').trim();
+    var mensaje = (wa.mensaje || '').replace('{nombre}', nombre || 'yo');
+    boton.href = 'https://wa.me/' + String(wa.numero).replace(/\D/g, '') +
+      '?text=' + encodeURIComponent(mensaje);
+  }
+
   form.addEventListener('submit', function (e) {
     e.preventDefault();
     if (!validar(steps[current])) return;
@@ -189,6 +200,7 @@
     btnSend.textContent = 'Enviando…';
 
     var datos = respuestas();
+    linkWhatsApp(datos['Nombre y apellido']);
     copiaNetlify(datos);
     enviar(datos)
       .catch(function (err) { console.error('[pre-call]', err); })

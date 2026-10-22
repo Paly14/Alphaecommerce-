@@ -185,7 +185,33 @@ h1, h2, .pc-brand, .pc-btn { font-family: 'Sora', sans-serif; }
   background: var(--pc-brand-soft); color: var(--pc-brand-dark);
   display: grid; place-items: center; font-size: 1.9rem; font-weight: 700;
 }
+.pc-thanks__tag {
+  display: inline-block; margin-bottom: 10px; padding: 5px 12px; border-radius: 999px;
+  background: var(--pc-brand-soft); color: var(--pc-brand-dark);
+  font-size: 0.78rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+}
 .pc-thanks__title { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
 .pc-thanks__sub { color: var(--pc-muted); margin: 10px auto 0; max-width: 460px; }
+.pc-thanks__note { color: var(--pc-muted); font-size: 0.85rem; margin: 14px auto 0; max-width: 420px; }
+
+/* Botón de WhatsApp de la pantalla final */
+.pc-btn--wa {
+  margin-top: 24px; width: 100%; max-width: 420px; padding: 17px 26px; font-size: 1.05rem;
+  background: var(--pc-wa); color: #06381c;
+  box-shadow: 0 14px 26px -12px rgba(37, 211, 102, 0.7);
+  animation: pc-pulse 2s ease-out infinite;
+}
+.pc-btn--wa:hover { background: var(--pc-wa-dark); color: #fff; }
+@keyframes pc-pulse {
+  0% { box-shadow: 0 14px 26px -12px rgba(37, 211, 102, 0.7), 0 0 0 0 rgba(37, 211, 102, 0.45); }
+  70% { box-shadow: 0 14px 26px -12px rgba(37, 211, 102, 0.7), 0 0 0 14px rgba(37, 211, 102, 0); }
+  100% { box-shadow: 0 14px 26px -12px rgba(37, 211, 102, 0.7), 0 0 0 0 rgba(37, 211, 102, 0); }
+}
+@media (prefers-reduced-motion: reduce) { .pc-btn--wa { animation: none; } }
+.pc-wa-ico {
+  width: 22px; height: 22px; flex: none; background: currentColor;
+  -webkit-mask: var(--pc-wa-mask) center/contain no-repeat; mask: var(--pc-wa-mask) center/contain no-repeat;
+  --pc-wa-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.32 4.95L2 22l5.25-1.38a9.9 9.9 0 0 0 4.79 1.22h.01c5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.82 9.82 0 0 0 12.04 2zm5.8 14.14c-.24.68-1.42 1.32-1.95 1.36-.5.05-.99.24-3.36-.7-2.83-1.11-4.62-4.01-4.76-4.2-.14-.19-1.14-1.51-1.14-2.88 0-1.37.72-2.05.97-2.33.25-.28.55-.35.73-.35.18 0 .37 0 .53.01.17.01.4-.06.62.48.24.55.81 1.92.88 2.06.07.14.12.3.02.49-.1.19-.14.3-.28.46-.14.16-.3.36-.42.48-.14.14-.29.29-.12.57.17.28.75 1.24 1.62 2.01 1.11.99 2.05 1.3 2.33 1.44.28.14.44.12.6-.07.16-.19.7-.81.89-1.09.18-.28.37-.23.62-.14.25.09 1.6.75 1.87.89.28.14.46.21.53.32.07.12.07.66-.17 1.35z'/%3E%3C/svg%3E");
+}
 
 .pc-foot { text-align: center; color: var(--pc-muted); font-size: 0.82rem; margin-top: 22px; }
